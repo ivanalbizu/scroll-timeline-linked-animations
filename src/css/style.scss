@@ -1,0 +1,292 @@
+*:where(:not(iframe, canvas, img, svg, video):not(svg *)) {
+  all: unset;
+  display: revert;
+  box-sizing: border-box;
+}
+:root {
+  --horizontal-individual-size: 100vh;
+  --horizontal-pinned-size: 7; //horizontal speed
+  --debug-bg-color: rebeccapurple;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #141414;
+  color: #fff;
+  line-height: 1.5;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+strong {
+  font-weight: 500;
+}
+.link {
+  cursor: pointer;
+  display: inline-block;
+  border-bottom: 1px solid #141414;
+}
+.warning {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  p {
+    max-width: 600px;
+    background-color: rgba(255, 255, 255, 0.96);
+    padding: 30px;
+    color: #141414;
+    cursor: pointer;
+    display: inline-block;
+    border-bottom: 1px solid #141414;
+  }
+}
+@supports (animation-timeline: works) {
+  @keyframes title {
+    to {
+      font-size: 0px;
+    }
+  }
+  @keyframes picture {
+    to {
+      width: 60vw;
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes clip {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes gallery-01 {
+    to {
+      transform: translateY(5vh);
+    }
+  }
+  @keyframes gallery-02 {
+    to {
+      transform: translateY(30vh) scale(1.1);
+    }
+  }
+  @keyframes gallery-03 {
+    to {
+      transform: translateY(20vh);
+    }
+  }
+  @keyframes scrolled-item {
+    to {
+      transform: translateX(calc(-100% + 100vw));
+    }
+  }
+  @keyframes move-horizontal-scrolling {
+    to {
+      transform: translateX(calc(-100% + 100vw));
+    }
+  }
+
+  @scroll-timeline title-timeline {
+    source: auto;
+    start: selector(#main) end 0;
+    end: selector(#main) start 0;
+    scroll-offsets: selector(#main) end 0, selector(#main) start 0;
+    time-range: 1s;
+  }
+  @scroll-timeline picture-timeline {
+    source: auto;
+    start: selector(#main) end 0;
+    end: selector(#main) start 0;
+    scroll-offsets: selector(#main) end 0, selector(#main) start 0;
+    time-range: 1s;
+  }
+  @scroll-timeline clip-timeline {
+    source: selector(body);
+    start: selector(#clip) end 0.5;
+    end: selector(#clip) end 1;
+    scroll-offsets: selector(#clip) end 0.5, selector(#clip) end 1;
+    time-range: 1s;
+  }
+  @scroll-timeline gallery-timeline-01 {
+    source: selector(body);
+    start: selector(#gallery-item-01) end 0;
+    end: selector(#gallery-item-01) start 1;
+    scroll-offsets: selector(#gallery-item-01) end 0,
+      selector(#gallery-item-01) start 1;
+    time-range: 1s;
+  }
+  @scroll-timeline gallery-timeline-02 {
+    source: selector(body);
+    start: selector(#gallery-item-02) end 0;
+    end: selector(#gallery-item-02) start 1;
+    scroll-offsets: selector(#gallery-item-02) end 0,
+      selector(#gallery-item-02) start 1;
+    time-range: 1s;
+  }
+  @scroll-timeline gallery-timeline-03 {
+    source: selector(body);
+    start: selector(#gallery-item-03) end 0;
+    end: selector(#gallery-item-03) start 1;
+    scroll-offsets: selector(#gallery-item-03) end 0,
+      selector(#gallery-item-03) start 1;
+    time-range: 1s;
+  }
+  @scroll-timeline horizontal-section-scrolling-into-view {
+    source: selector(body);
+    scroll-offsets: selector(#horizontal) start 1, selector(#horizontal) end 1;
+    start: selector(#horizontal) start 1;
+    end: selector(#horizontal) end 1;
+    time-range: 1s;
+  }
+
+  .title-intro {
+    will-change: transform;
+    animation: 1s linear forwards title;
+    animation-timeline: title-timeline;
+  }
+  .picture {
+    will-change: transform;
+    animation: 1s linear forwards picture;
+    animation-timeline: picture-timeline;
+  }
+  .clip-article {
+    clip-path: inset(0 0 100% 0);
+    will-change: transform;
+    animation: 1s linear forwards clip;
+    animation-timeline: clip-timeline;
+  }
+  .gallery-item-01 {
+    will-change: transform;
+    animation: 1s linear forwards gallery-01;
+    animation-timeline: gallery-timeline-01;
+  }
+  .gallery-item-02 {
+    will-change: transform;
+    animation: 1s linear forwards gallery-02;
+    animation-timeline: gallery-timeline-02;
+  }
+  .gallery-item-03 {
+    will-change: transform;
+    animation: 1s linear forwards gallery-03;
+    animation-timeline: gallery-timeline-03;
+  }
+  .pin-wrap {
+    will-change: transform;
+    animation: 1s linear move-horizontal-scrolling forwards;
+    animation-timeline: horizontal-section-scrolling-into-view;
+  }
+
+  .warning {
+    display: none;
+  }
+}
+@supports not (animation-timeline: works) {
+  :root {
+    --horizontal-pinned-size: 1; //horizontal speed
+  }
+}
+
+.footer {
+  height: 120vh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  .link {
+    border-bottom-color: #fff;
+  }
+}
+
+.title-intro {
+  font-size: clamp(1.2rem, calc(3rem + 4vw), 7vw);
+  text-align: center;
+  margin-bottom: 3rem;
+  line-height: 1;
+}
+.title-footer {
+  font-size: clamp(1.2rem, calc(3rem + 4vw), 7vw);
+  margin-bottom: 3rem;
+  line-height: 1;
+}
+.picture {
+  display: block;
+  margin: auto;
+  width: 20vw;
+}
+
+.intro {
+  background-color: var(--debug-bg-color, transparent);
+  height: 100vw;
+  display: grid;
+  place-content: center;
+}
+
+.clip {
+  background-color: var(--debug-bg-color, transparent);
+  width: min(900px, 90vw);
+  margin: 6rem auto;
+  padding: min(20px, 4vw);
+  min-height: 140vh;
+  font-size: clamp(2rem, calc(2rem + 2vw), 6vw);
+  text-transform: uppercase;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  .clip-article {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+.gallery {
+  background-color: var(--debug-bg-color, transparent);
+  width: min(1920px, 94vw);
+  margin: 90vh auto 90vh;
+  min-height: 120vh;
+
+  display: grid;
+  place-items: center;
+  grid-template-rows: 20vh 80vh 60vh;
+  @media (min-width: 840px) {
+    grid-auto-flow: column;
+    grid-template-rows: auto;
+  }
+}
+
+.horizontal {
+  background-color: var(--debug-bg-color, transparent);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  left: 0;
+}
+
+.horizontal {
+  height: calc(
+    var(--horizontal-pinned-size) * var(--horizontal-individual-size)
+  );
+  overflow: visible;
+}
+
+.pin-wrap {
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 50px 0;
+
+  height: var(--horizontal-individual-size);
+  position: sticky;
+  top: 0;
+
+  & > img {
+    min-width: 80vw;
+    padding: 0 5vw;
+  }
+  .title-horizontal {
+    font-size: min(2.5rem, 7vw);
+    font-weight: 300;
+    width: min(80vw, 800px);
+    margin-left: 30px;
+  }
+}
